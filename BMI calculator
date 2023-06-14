@@ -1,0 +1,231 @@
+# Conversion of imperial units to metric units for height and weight.
+# Conversion values are from Google
+
+def convert_imperial_to_metric(height_feet, height_inches, weight_pounds):
+    
+    """
+    Converts height and weight from imperial units (feet/inches and pounds) to 
+    metric units (meters and kilograms).
+    
+    Parameters
+    ----------
+    height_feet : int
+        Height measurement in feet.
+    height_inches : int
+        Height measurement in inches.
+    weight_pounds : int
+        Weight measurement in pounds.
+        
+    Returns
+    -------
+    height_meters : float
+        Height measurement in meters.
+    weight_kg : float
+        Weight measurement in kilograms.
+        
+    """
+    
+    # Convert height from feet/inches to meters
+    height_inches_total = height_feet * 12 + height_inches
+    height_meters = height_inches_total * 0.0254
+
+    # Convert weight from pounds to kilograms
+    weight_kg = weight_pounds * 0.4536
+
+    return height_meters, weight_kg
+ 
+def test_convert_imperial_to_metric():
+
+    assert convert_imperial_to_metric(5, 4, 120) == (1.6256, 54.432)
+    
+# This code is a BMI calculator that works for the inputs in metric units.
+
+def calculate_bmi(weight, height):
+    
+    """
+    Calculates the Body Mass Index (BMI) using weight and height measurements in 
+    metric units.
+    
+    Parameters
+    ----------
+    weight : float
+        Weight measurement in kilograms.
+    height : float
+        Height measurement in meters.
+        
+    Returns
+    -------
+    bmi : float
+        Body Mass Index (BMI) calculated from the weight and height.
+        
+    """
+    
+    bmi = weight / (height * height)
+    return bmi
+
+def interpret_bmi(bmi):
+    
+    """
+    Interprets the Body Mass Index (BMI) into weight status categories.
+    
+    Parameters
+    ----------
+    bmi : float
+        Body Mass Index (BMI) value to interpret.
+        
+    Returns
+    -------
+    interpretation : str
+        Weight status interpretation based on the BMI.
+        
+    """
+    
+    # BMI values from CDC website [https://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/index.html#Interpreted]
+    if bmi < 18.5:
+        return "Underweight"
+    elif 18.5 <= bmi < 24.9:
+        return "Healthy weight"
+    elif 25 <= bmi < 29.9:
+        return "Overweight"
+    else:
+        return "Obese"
+
+def bmi_calculator():
+    
+    """
+    Calculates BMI and provides weight status interpretation based on user input in 
+    metric units.
+    
+    The user can input weight and height, and the BMI is calculated accordingly.
+    
+    The weight status interpretation is displayed, and the user has the option to 
+    calculate again.
+    
+    """
+    
+    while True:
+        weight = float(input("Enter your weight in kilograms: "))
+        height = float(input("Enter your height in meters: "))
+        
+        bmi = calculate_bmi(weight, height)
+        interpretation = interpret_bmi(bmi)
+        
+        print("Your BMI: {:.2f}".format(bmi)) # {:.2f} is a formatting specifier. It is used to display the BMI
+                                              # value with two decimal places.
+        print("Weight Status: ", interpretation)
+        
+        choice = input("Do you want to calculate again? (yes/no): ")
+        if choice.lower() != "yes":
+            break
+
+bmi_calculator()
+
+def test_calculate_bmi():
+    
+    assert calculate_bmi(54.432, 1.6256) == 20.60
+ 
+# Conversion of metric units to imperial units for height and weight.
+
+def convert_metric_to_imperial(height_meters, weight_kg):
+    
+    """
+    Convert height from meters to feet/inches and weight from kilograms to pounds.
+
+    Parameters:
+    height_meters (float): Height in meters.
+    weight_kg (float): Weight in kilograms.
+
+    Returns:
+    height_feet (int): Height in feet.
+    height_remaining_inches (int): Remaining inches after converting height.
+    weight_pounds (float): Weight in pounds.
+    
+    """
+    
+    # Convert height from meters to feet/inches
+    height_inches = height_meters * 39.37
+    height_feet = int(height_inches // 12)
+    height_remaining_inches = round(height_inches % 12)
+
+    # Convert weight from kilograms to pounds
+    weight_pounds = weight_kg * 2.2046
+
+    return height_feet, height_remaining_inches, weight_pounds
+   
+def test_convert_metric_to_imperial():
+    
+    assert convert_metric_to_imperial(1.6256, 54.432) == (5, 4, 120)
+    
+# This code is a BMI calculator that works for the inputs in imperial units (lbs/feet)
+
+def calculate_bmi(weight, height_feet, height_inches):
+    
+    """
+    Calculate BMI based on weight (in pounds) and height (in feet/inches).
+
+    Parameters:
+    weight (float): Weight in pounds.
+    height_feet (float): Height in feet.
+    height_inches (float): Remaining inches of height.
+
+    Returns:
+    bmi (float): Calculated BMI value.
+    
+    """
+    
+    total_height = height_feet * 12 + height_inches
+    bmi = (weight / (total_height * total_height)) * 703
+    return bmi
+
+def interpret_bmi(bmi):
+    
+    """
+    Interpret BMI value and determine weight status.
+
+    Parameters:
+    bmi (float): BMI value.
+
+    Returns:
+    weight_status (str): Weight status category based on BMI.
+    
+    """
+    
+    # BMI values from CDC website [https://www.cdc.gov/healthyweight/assessing/bmi/adult_bmi/index.html#Interpreted]
+    if bmi < 18.5:
+        return "Underweight"
+    elif 18.5 <= bmi < 24.9:
+        return "Healthy weight"
+    elif 25 <= bmi < 29.9:
+        return "Overweight"
+    else:
+        return "Obese"
+
+def bmi_calculator():
+    
+    """
+    Run the BMI calculator program.
+
+    This function prompts the user to enter their weight (in pounds), height 
+    (in feet and inches), calculates the BMI using the provided inputs, and interprets
+    the BMI to determine the weight status.
+    
+    The results are then displayed, and the user is given the option to calculate again.
+
+    """
+    
+    while True:
+        weight = float(input("Enter your weight in pounds: "))
+        height_feet = float(input("Enter your height in feet: "))
+        height_inches = float(input("Enter the remaining inches of your height: "))
+
+        bmi = calculate_bmi(weight, height_feet, height_inches)
+        interpretation = interpret_bmi(bmi)
+
+        print("Your BMI: {:.2f}".format(bmi))
+        print("Weight Status: ", interpretation)
+
+        choice = input("Do you want to calculate again? (yes/no): ")
+        if choice.lower() != "yes":
+            break
+
+bmi_calculator()
